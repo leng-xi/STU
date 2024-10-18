@@ -31,8 +31,6 @@ public class LoginController {
             form.put("type",m.get("type"));
             String jwt= JwtUtils.generateJwt(form);
             return Result.success(jwt);
-
-
         }
         return Result.error("用户名或密码错误");
     }
