@@ -1,5 +1,6 @@
 package org.example.stu.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.stu.pojo.TeacherDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -12,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author 
  * @since 2024-10-21
  */
+@Mapper
 public interface TeacherDetailMapper extends BaseMapper<TeacherDetail>{
     @Select("select * from teacher_detail where teacher_id = #{teacherId}")
     TeacherDetail selectByTeacherId(int teacherId);

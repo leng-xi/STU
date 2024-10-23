@@ -1,5 +1,6 @@
 package org.example.stu.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.stu.pojo.StudentDetail;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author leng-xi
  * @since 2024-10-19
  */
+@Mapper
 public interface StudentDetailMapper extends BaseMapper<StudentDetail> {
     @Select("select * from student_detail where student_id = #{studentId}")
     StudentDetail selectByStudentId(int studentId);
