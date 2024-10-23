@@ -2,12 +2,8 @@ package org.example.stu.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.example.stu.mapper.PersonMapper;
-import org.example.stu.mapper.StudentMapper;
-import org.example.stu.mapper.UserMapper;
-import org.example.stu.pojo.Person;
-import org.example.stu.pojo.Student;
-import org.example.stu.pojo.User;
+import org.example.stu.mapper.*;
+import org.example.stu.pojo.*;
 import org.example.stu.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +19,10 @@ public class StudentService {
     private PersonMapper personMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private HonourMapper honourMapper;
+    @Autowired
+    private StudentDetailMapper studentDetailMapper;
 
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
@@ -49,6 +49,12 @@ public class StudentService {
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.insert(user);
+        StudentDetail studentDetail=new StudentDetail();
+        Honour honour=new Honour();
+        studentDetail.setStudentId(student.getId());
+        honour.setStudentId(student.getId());
+        studentDetailMapper.insert(studentDetail);
+        honourMapper.insert(honour);
         return true;
     }
 

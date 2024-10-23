@@ -52,7 +52,7 @@ public class StudentController {
     }        */
     @PostMapping("/addStudent")
     public Result addStudent(@RequestBody Student student){
-        log.info("添加学生信息:{}",student);
+        log.info("新增学生信息:{}",student);
         if(!studentService.addStudent(student)){
             return Result.error("添加失败");
         }
