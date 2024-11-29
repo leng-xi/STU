@@ -18,6 +18,7 @@ public class StudentController {
 
     /*
     查询
+    例 getStudentList?page=1&pageSize=5
     page 页数
     pageSize 每页显示的条数    */
     @GetMapping("/getStudentList")
@@ -59,7 +60,9 @@ public class StudentController {
     return Result.success("添加成功");
     }
 
-    /*通过personId删除学生*/
+    /*通过personId删除学生
+    "id":1
+    */
     @PostMapping("/deleteStudent")
     public Result deleteStudent(@RequestBody Person person){
         int personId = person.getId();
