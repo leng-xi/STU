@@ -59,7 +59,6 @@ public class StudentService {
     }
 
     public boolean deletePerson(int personId) {
-
         return personMapper.deleteById(personId)>0;
     }
 

@@ -2,9 +2,7 @@ package org.example.stu.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.stu.pojo.StudentDetail;
 import org.example.stu.pojo.TeacherDetail;
-import org.example.stu.service.StudentDetailService;
 import org.example.stu.service.TeacherDetailService;
 import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;

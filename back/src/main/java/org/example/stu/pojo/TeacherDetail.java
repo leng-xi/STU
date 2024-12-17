@@ -49,11 +49,6 @@ public class TeacherDetail implements Serializable {
     private String policyFace;
 
     /**
-     * 学历
-     */
-    private String education;
-
-    /**
      * 科研成果
      */
     private String scientific;

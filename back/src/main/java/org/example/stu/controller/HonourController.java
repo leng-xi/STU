@@ -3,9 +3,7 @@ package org.example.stu.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.stu.pojo.Honour;
-import org.example.stu.pojo.StudentDetail;
 import org.example.stu.service.HonourService;
-import org.example.stu.service.StudentDetailService;
 import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
