@@ -1,6 +1,9 @@
 <template>
   <div>
-     <el-button type="primary" plain>新增</el-button>
+    <div>
+      <el-button type="primary" plain>新增</el-button>
+    </div>
+    <div></div>
     <el-table :data="studentList" border style="width: 100%">
       <el-table-column fixed prop="person.name" label="姓名" width="100">
       </el-table-column>
@@ -48,6 +51,8 @@
     </div>
   </div>
 </template>
+
+
 <script>
 import axios from "axios";
 export default {

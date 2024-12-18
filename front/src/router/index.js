@@ -5,19 +5,23 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/login',
-    component: () => import('../views/LoginView.vue')
+    component: () => import('../components/LoginView.vue')
   },{
     path:'/404',
     component:()=>import('../views/404View.vue')
   },
   {
     path: '/container',
-    redirect: '/container/studentList',
-    component: () => import('../views/ContainerView.vue'),
+    redirect: '/container/CourseListView.vue',
+    component: () => import('../components/ContainerView.vue'),
     children:[
       {
         path:'/container/studentList',
         component: () => import('../views/StudentListView.vue'),
+      },
+      {
+        path:'/container/studentList/createStudent',
+        component: () => import('../components/create/createStudent.vue'),
       },
       {
         path:'/container/teacherList',

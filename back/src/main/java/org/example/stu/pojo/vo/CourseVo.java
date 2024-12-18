@@ -1,7 +1,6 @@
-package org.example.stu.pojo;
+package org.example.stu.pojo.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("course")
-public class Course {
+public class CourseVo {
     private Integer id;
     private String courseName;
     private String courseNum;
@@ -23,6 +21,8 @@ public class Course {
     private String place;
     private Integer term;
     private Integer teacherId;
+    private String teacherName;
+    private String teacherNum;
     private Integer isopen;
     private String pre1;
     private String pre2;

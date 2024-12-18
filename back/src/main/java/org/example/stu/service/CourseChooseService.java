@@ -56,19 +56,27 @@ public class CourseChooseService {
         PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
         return pageBean;
     }
-    public Boolean addCourseChoose(CourseChoose courseChoose){
+    public Integer addCourseChoose(CourseChoose courseChoose){
+        if(courseMapper.selectById(courseChoose.getCourseId()).getIsopen()==0)return 0;
         List<CourseChoose> courseChooseList = courseChooseMapper.selectByStudentId(courseChoose.getStudentId());
         for (CourseChoose choose : courseChooseList) {
-            if (choose.getCourseId().equals(courseChoose.getCourseId()))return false;
+            if (choose.getCourseId().equals(courseChoose.getCourseId()))return 1;
         }
-        return courseChooseMapper.insert(courseChoose)>0;
+        courseChooseMapper.insert(courseChoose);
+        return 2;
     }
     public Boolean addScore(CourseChoose courseChoose){
         CourseChoose courseChoose1 = courseChooseMapper.findByStuentIdAndCourseId(courseChoose.getStudentId(), courseChoose.getCourseId());
         if (courseChoose1!=null){return false;}
         Course course=courseMapper.selectById(courseChoose.getCourseId());
-        int score4=courseChoose.getScore1()*Integer.parseInt(course.getPre1())+courseChoose.getScore2()*Integer.parseInt(course.getPre2())+courseChoose.getScore3()*Integer.parseInt(course.getPre3());
-        courseChoose.setScore4(score4/100);
-        return courseChooseMapper.insert(courseChoose)>0;
+        int score3=courseChoose.getScore1()*Integer.parseInt(course.getPre1())+courseChoose.getScore2()*Integer.parseInt(course.getPre2());
+        courseChoose.setScore3(score3/100);
+        courseChooseMapper.updateById(courseChoose);
+        return true;
+    }
+
+    public boolean delete(CourseChoose courseChoose) {
+        courseChooseMapper.deleteByStudentIdAndCourseId(courseChoose);
+        return true;
     }
 }

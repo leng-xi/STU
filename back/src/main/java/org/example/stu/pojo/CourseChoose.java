@@ -22,5 +22,4 @@ public class CourseChoose {
     private Integer score1;
     private Integer score2;
     private Integer score3;
-    private Integer score4;
 }

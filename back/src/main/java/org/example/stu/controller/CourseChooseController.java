@@ -53,7 +53,10 @@ public class CourseChooseController {
     @PostMapping("/addCourseChoose")
     public Result addCourseChoose(@RequestBody CourseChoose courseChoose){
         log.info("courseChoose:{}",courseChoose);
-        if(!courseChooseService.addCourseChoose(courseChoose)){
+        if(courseChooseService.addCourseChoose(courseChoose)==0){
+            return Result.error("未开课");
+        }
+        if(courseChooseService.addCourseChoose(courseChoose)==1){
             return Result.error("已存在");
         }
         return Result.success("添加成功");
@@ -65,5 +68,13 @@ public class CourseChooseController {
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+    @PostMapping("/delete")
+    public Result delete(@RequestBody CourseChoose courseChoose){
+        log.info("courseChoose:{}",courseChoose);
+        if(courseChooseService.delete(courseChoose)){
+            return Result.success();
+        }
+        return Result.error("删除失败");
     }
 }

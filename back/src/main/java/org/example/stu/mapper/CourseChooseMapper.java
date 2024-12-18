@@ -18,4 +18,6 @@ public interface CourseChooseMapper extends BaseMapper<CourseChoose> {
     List<CourseChoose> selectByStudentId(Integer studentId);
     @Select("select * from course_choose where student_id=#{studentId} and course_id=#{courseId}")
     CourseChoose findByStuentIdAndCourseId(Integer studentId, Integer courseId);
+    @Select("select * from course_choose where student_id=#{studentId} and course_id=#{courseId}")
+    void deleteByStudentIdAndCourseId(CourseChoose courseChoose);
 }
