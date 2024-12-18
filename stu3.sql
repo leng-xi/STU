@@ -16,6 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `contest`
+--
+
+DROP TABLE IF EXISTS `contest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `contest` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT '竞赛名称',
+  `award` varchar(255) NOT NULL COMMENT '奖项',
+  `organizational_unit` varchar(50) DEFAULT NULL COMMENT '举办单位',
+  `time` date DEFAULT NULL COMMENT '竞赛时间',
+  `student_id` int DEFAULT NULL COMMENT '学生id',
+  PRIMARY KEY (`id`),
+  KEY `contest_student_id_fk` (`student_id`),
+  CONSTRAINT `contest_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='创新项目表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contest`
+--
+
+LOCK TABLES `contest` WRITE;
+/*!40000 ALTER TABLE `contest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contest` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `course`
 --
 
@@ -34,10 +63,13 @@ CREATE TABLE `course` (
   `place` varchar(20) DEFAULT NULL COMMENT '上课地点',
   `term` int DEFAULT NULL COMMENT '学期',
   `teacher_id` int DEFAULT NULL COMMENT '授课教师',
+  `pre1` int DEFAULT '25' COMMENT '平时成绩',
+  `pre2` int DEFAULT '25' COMMENT '作业成绩',
+  `pre3` int DEFAULT '50' COMMENT '考试成绩',
   PRIMARY KEY (`id`),
   KEY `course_teacher_id_fk` (`teacher_id`),
   CONSTRAINT `course_teacher_id_fk` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +78,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
+INSERT INTO `course` VALUES (1,'概率论','C0001','数学学院',32,2,'1','{\"0\": 13, \"1\": 44}','5-203',3,1,25,25,50),(2,'离散数学','C0002','数学学院',16,2,'1','{\"0\": 22}','3-202',4,3,25,25,50),(3,'微积分','C0003','数学学院',16,2,'1','{\"0\": 11}','3-201',4,3,25,25,50);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,12 +93,16 @@ CREATE TABLE `course_choose` (
   `id` int NOT NULL AUTO_INCREMENT,
   `student_id` int DEFAULT NULL,
   `course_id` int DEFAULT NULL,
+  `score1` int DEFAULT NULL COMMENT '平时成绩',
+  `score2` int DEFAULT NULL COMMENT '作业成绩 ',
+  `score3` int DEFAULT NULL COMMENT '考试成绩',
+  `course4` int DEFAULT NULL COMMENT '最终成绩',
   PRIMARY KEY (`id`),
   KEY `course_choose_course_id_fk` (`course_id`),
   KEY `course_choose_student_id_fk` (`student_id`),
   CONSTRAINT `course_choose_course_id_fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `course_choose_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='选课表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='选课表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,6 +111,7 @@ CREATE TABLE `course_choose` (
 
 LOCK TABLES `course_choose` WRITE;
 /*!40000 ALTER TABLE `course_choose` DISABLE KEYS */;
+INSERT INTO `course_choose` VALUES (1,4,1,NULL,NULL,NULL,NULL),(2,4,2,NULL,NULL,NULL,NULL),(3,4,3,NULL,NULL,NULL,NULL),(4,6,1,NULL,NULL,NULL,NULL),(5,6,2,NULL,NULL,NULL,NULL),(6,6,3,NULL,NULL,NULL,NULL),(7,7,1,NULL,NULL,NULL,NULL),(8,7,2,NULL,NULL,NULL,NULL),(9,7,3,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `course_choose` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,8 +131,8 @@ CREATE TABLE `honour` (
   `scientific` varchar(50) DEFAULT NULL COMMENT '科研成果',
   PRIMARY KEY (`id`),
   KEY `honour_student_id_fk` (`student_id`),
-  CONSTRAINT `honour_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人荣誉';
+  CONSTRAINT `honour_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人荣誉';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,8 +141,38 @@ CREATE TABLE `honour` (
 
 LOCK TABLES `honour` WRITE;
 /*!40000 ALTER TABLE `honour` DISABLE KEYS */;
-INSERT INTO `honour` VALUES (1,1,NULL,NULL,NULL,NULL),(2,4,NULL,NULL,NULL,NULL),(3,5,NULL,NULL,NULL,NULL);
+INSERT INTO `honour` VALUES (2,4,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL),(5,7,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `honour` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `innovation`
+--
+
+DROP TABLE IF EXISTS `innovation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `innovation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `project` varchar(255) NOT NULL COMMENT '项目名称',
+  `content` varchar(255) NOT NULL COMMENT '项目内容',
+  `tutor` varchar(50) DEFAULT NULL COMMENT '指导教师',
+  `data1` date DEFAULT NULL COMMENT '开始日期',
+  `data2` date DEFAULT NULL COMMENT '结束日期',
+  `student_id` int DEFAULT NULL COMMENT '学生id',
+  PRIMARY KEY (`id`),
+  KEY `innovation_student_id_fk` (`student_id`),
+  CONSTRAINT `innovation_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='创新项目表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `innovation`
+--
+
+LOCK TABLES `innovation` WRITE;
+/*!40000 ALTER TABLE `innovation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `innovation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -126,7 +194,7 @@ CREATE TABLE `person` (
   `phone` varchar(20) DEFAULT NULL COMMENT '电话',
   `address` varchar(20) DEFAULT NULL COMMENT '地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人员表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +203,7 @@ CREATE TABLE `person` (
 
 LOCK TABLES `person` WRITE;
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
-INSERT INTO `person` VALUES (1,'张三','1','1',NULL,'1',NULL,NULL,NULL,NULL),(10,'张三2','1','1',NULL,'1',NULL,NULL,NULL,NULL),(11,'张三2','1','1',NULL,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `person` VALUES (1,'admin','1','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(10,'张三','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(12,'刘学帅','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(13,'李四','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(14,'王五','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(15,'陈志勇','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(16,'丁子星','2','软件学院',NULL,'2',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +222,7 @@ CREATE TABLE `student` (
   PRIMARY KEY (`id`),
   KEY `student_person_person_id_fk` (`person_id`),
   CONSTRAINT `student_person_person_id_fk` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +231,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (1,1,'1','1'),(4,10,'2','2'),(5,11,'2','2');
+INSERT INTO `student` VALUES (4,10,'2','2'),(6,13,'2','1'),(7,14,'2','2');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +257,7 @@ CREATE TABLE `student_detail` (
   PRIMARY KEY (`id`),
   KEY `student_detail_student_student_id_fk` (`student_id`),
   CONSTRAINT `student_detail_student_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生详细信息';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生详细信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,7 +266,7 @@ CREATE TABLE `student_detail` (
 
 LOCK TABLES `student_detail` WRITE;
 /*!40000 ALTER TABLE `student_detail` DISABLE KEYS */;
-INSERT INTO `student_detail` VALUES (1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `student_detail` VALUES (2,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,7,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `student_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,7 +285,7 @@ CREATE TABLE `teacher` (
   PRIMARY KEY (`id`),
   KEY `teacher_person_person_id_fk` (`person_id`),
   CONSTRAINT `teacher_person_person_id_fk` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,6 +294,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
+INSERT INTO `teacher` VALUES (1,12,'博士','辅导员'),(3,15,'博士','研究生导师'),(4,16,'研究生','辅导员');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,12 +311,11 @@ CREATE TABLE `teacher_detail` (
   `group` varchar(20) DEFAULT NULL COMMENT '民族',
   `address` varchar(50) DEFAULT NULL COMMENT '籍贯',
   `policy_face` varchar(20) DEFAULT NULL COMMENT '政治面貌',
-  `education` varchar(100) DEFAULT NULL COMMENT '学历',
   `scientific` varchar(100) DEFAULT NULL COMMENT '科研成果',
   PRIMARY KEY (`id`),
   KEY `teacher_detail_teacher_teacher_id_fk` (`teacher_id`),
   CONSTRAINT `teacher_detail_teacher_teacher_id_fk` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师详细信息';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师详细信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,6 +324,7 @@ CREATE TABLE `teacher_detail` (
 
 LOCK TABLES `teacher_detail` WRITE;
 /*!40000 ALTER TABLE `teacher_detail` DISABLE KEYS */;
+INSERT INTO `teacher_detail` VALUES (1,1,'汉族',NULL,'党员',NULL),(2,3,'汉族',NULL,'党员',NULL),(3,4,'汉族',NULL,'党员',NULL);
 /*!40000 ALTER TABLE `teacher_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +346,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   KEY `user_person_id_fk` (`person_id`),
   CONSTRAINT `user_person_id_fk` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +355,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'3332','23',NULL,NULL,1),(2,'123','123',NULL,NULL,10),(3,'324','42',NULL,NULL,11);
+INSERT INTO `user` VALUES (1,'admin','123',NULL,NULL,1),(2,'2023003001','123',NULL,NULL,10),(4,'T0001','123',NULL,NULL,12),(5,'2023003002','123',NULL,NULL,13),(6,'2023003003','123',NULL,NULL,14),(7,'T0002','123',NULL,NULL,15),(8,'T0003','123',NULL,NULL,16);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -299,4 +368,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 16:02:30
+-- Dump completed on 2024-12-18 12:56:00

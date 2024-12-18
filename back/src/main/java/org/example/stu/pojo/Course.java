@@ -17,11 +17,15 @@ public class Course {
     private String courseNum;
     private String openingUnit;
     private Integer totalHours;
-    private Double credit;
+    private String credits;
     private String courseType;
-    private Integer[] time;
+    private String time;
     private String place;
-    private Teacher teacher;
+    private Integer term;
     private Integer teacherId;
-
+    private String teacherName;
+    private String teacherNum;
+    private String pre1;
+    private String pre2;
+    private String pre3;
 }

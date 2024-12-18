@@ -13,6 +13,14 @@ import lombok.NoArgsConstructor;
 @TableName("course_choose")
 public class CourseChoose {
     private Integer id;
-    private Student student;
-    private Course course;
+    private Integer studentId;
+    private String studentName;
+    private String studentNum;
+    private Integer courseId;
+    private String courseName;
+    private String courseNum;
+    private Integer score1;
+    private Integer score2;
+    private Integer score3;
+    private Integer score4;
 }

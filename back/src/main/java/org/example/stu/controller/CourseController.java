@@ -15,6 +15,25 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    /*样例
+    "id": 1,
+    "courseName": "概率论",
+    "courseNum": "C0001",
+    "openingUnit": "数学学院",
+    "totalHours": 32,
+    "credits": "2.0",
+    "courseType": "1",
+    "time": "{\"0\": 13, \"1\": 44}",
+    "place": "5-203",
+    "term": 3,
+    "teacherId": 1,
+    "teacherName": "刘学帅"
+    "teacherNum": "T0001"
+
+    courseType 1 必修 2 选修
+    time   13 周一第三节课
+    term   3 大二上学期  6 大三下学期   1-8
+    */
     @GetMapping("/getCourseList")
     public Result getCourseList(@RequestParam(defaultValue = "1") Integer page,
                                  @RequestParam(defaultValue = "10") Integer pageSize
