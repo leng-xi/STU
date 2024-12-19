@@ -57,19 +57,19 @@ CREATE TABLE `course` (
   `course_num` varchar(255) NOT NULL COMMENT '课序号',
   `opening_unit` varchar(255) DEFAULT NULL COMMENT '开课单位',
   `total_hours` int DEFAULT NULL COMMENT '总学时',
-  `credits` double DEFAULT NULL COMMENT '学分',
+  `credits` varchar(20) DEFAULT NULL COMMENT '学分',
   `course_type` varchar(255) DEFAULT NULL COMMENT '课程类型',
-  `time` json DEFAULT NULL COMMENT '上课时间',
+  `time` int DEFAULT NULL COMMENT '上课时间',
   `place` varchar(20) DEFAULT NULL COMMENT '上课地点',
   `term` int DEFAULT NULL COMMENT '学期',
+  `isopen` int DEFAULT '1',
   `teacher_id` int DEFAULT NULL COMMENT '授课教师',
-  `pre1` int DEFAULT '25' COMMENT '平时成绩',
-  `pre2` int DEFAULT '25' COMMENT '作业成绩',
-  `pre3` int DEFAULT '50' COMMENT '考试成绩',
+  `pre1` varchar(20) DEFAULT '50' COMMENT '平时成绩',
+  `pre2` varchar(20) DEFAULT '50' COMMENT '作业成绩',
   PRIMARY KEY (`id`),
   KEY `course_teacher_id_fk` (`teacher_id`),
   CONSTRAINT `course_teacher_id_fk` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'概率论','C0001','数学学院',32,2,'1','{\"0\": 13, \"1\": 44}','5-203',3,1,25,25,50),(2,'离散数学','C0002','数学学院',16,2,'1','{\"0\": 22}','3-202',4,3,25,25,50),(3,'微积分','C0003','数学学院',16,2,'1','{\"0\": 11}','3-201',4,3,25,25,50);
+INSERT INTO `course` VALUES (1,'概率论','C0001','数学学院',32,'2','必修',12,'5-203',3,1,1,'50','50'),(2,'离散数学','C0002','数学学院',16,'2','必修',33,'3-202',4,1,3,'50','50'),(3,'微积分','C0003','数学学院',16,'2','必修',44,'3-201',4,1,3,'50','50'),(5,'web','123','',NULL,'','',NULL,'',NULL,1,NULL,'','');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,6 @@ CREATE TABLE `course_choose` (
   `score1` int DEFAULT NULL COMMENT '平时成绩',
   `score2` int DEFAULT NULL COMMENT '作业成绩 ',
   `score3` int DEFAULT NULL COMMENT '考试成绩',
-  `course4` int DEFAULT NULL COMMENT '最终成绩',
   PRIMARY KEY (`id`),
   KEY `course_choose_course_id_fk` (`course_id`),
   KEY `course_choose_student_id_fk` (`student_id`),
@@ -111,7 +110,7 @@ CREATE TABLE `course_choose` (
 
 LOCK TABLES `course_choose` WRITE;
 /*!40000 ALTER TABLE `course_choose` DISABLE KEYS */;
-INSERT INTO `course_choose` VALUES (1,4,1,NULL,NULL,NULL,NULL),(2,4,2,NULL,NULL,NULL,NULL),(3,4,3,NULL,NULL,NULL,NULL),(4,6,1,NULL,NULL,NULL,NULL),(5,6,2,NULL,NULL,NULL,NULL),(6,6,3,NULL,NULL,NULL,NULL),(7,7,1,NULL,NULL,NULL,NULL),(8,7,2,NULL,NULL,NULL,NULL),(9,7,3,NULL,NULL,NULL,NULL);
+INSERT INTO `course_choose` VALUES (1,4,1,NULL,NULL,NULL),(2,4,2,NULL,NULL,NULL),(3,4,3,NULL,NULL,NULL),(4,6,1,NULL,NULL,NULL),(5,6,2,NULL,NULL,NULL),(6,6,3,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `course_choose` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,7 +131,7 @@ CREATE TABLE `honour` (
   PRIMARY KEY (`id`),
   KEY `honour_student_id_fk` (`student_id`),
   CONSTRAINT `honour_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人荣誉';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人荣誉';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +140,7 @@ CREATE TABLE `honour` (
 
 LOCK TABLES `honour` WRITE;
 /*!40000 ALTER TABLE `honour` DISABLE KEYS */;
-INSERT INTO `honour` VALUES (2,4,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL),(5,7,NULL,NULL,NULL,NULL);
+INSERT INTO `honour` VALUES (2,4,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL),(7,9,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `honour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +193,7 @@ CREATE TABLE `person` (
   `phone` varchar(20) DEFAULT NULL COMMENT '电话',
   `address` varchar(20) DEFAULT NULL COMMENT '地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人员表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +202,7 @@ CREATE TABLE `person` (
 
 LOCK TABLES `person` WRITE;
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
-INSERT INTO `person` VALUES (1,'admin','1','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(10,'张三','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(12,'刘学帅','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(13,'李四','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(14,'王五','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(15,'陈志勇','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(16,'丁子星','2','软件学院',NULL,'2',NULL,NULL,NULL,NULL);
+INSERT INTO `person` VALUES (1,'admin','1','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(10,'张三','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(12,'刘学帅','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(13,'李四','3','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(15,'陈志勇','2','软件学院',NULL,'1',NULL,NULL,NULL,NULL),(16,'丁子星','2','软件学院',NULL,'2',NULL,NULL,NULL,NULL),(18,'苏浩','1','','123',NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +221,7 @@ CREATE TABLE `student` (
   PRIMARY KEY (`id`),
   KEY `student_person_person_id_fk` (`person_id`),
   CONSTRAINT `student_person_person_id_fk` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +230,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (4,10,'2','2'),(6,13,'2','1'),(7,14,'2','2');
+INSERT INTO `student` VALUES (4,10,'2','2'),(6,13,'2','1'),(9,18,'','');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,7 +256,7 @@ CREATE TABLE `student_detail` (
   PRIMARY KEY (`id`),
   KEY `student_detail_student_student_id_fk` (`student_id`),
   CONSTRAINT `student_detail_student_student_id_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生详细信息';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生详细信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,7 +265,7 @@ CREATE TABLE `student_detail` (
 
 LOCK TABLES `student_detail` WRITE;
 /*!40000 ALTER TABLE `student_detail` DISABLE KEYS */;
-INSERT INTO `student_detail` VALUES (2,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,7,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `student_detail` VALUES (2,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(7,9,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `student_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,7 +345,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   KEY `user_person_id_fk` (`person_id`),
   CONSTRAINT `user_person_id_fk` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,7 +354,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','123',NULL,NULL,1),(2,'2023003001','123',NULL,NULL,10),(4,'T0001','123',NULL,NULL,12),(5,'2023003002','123',NULL,NULL,13),(6,'2023003003','123',NULL,NULL,14),(7,'T0002','123',NULL,NULL,15),(8,'T0003','123',NULL,NULL,16);
+INSERT INTO `user` VALUES (1,'admin','123',NULL,NULL,1),(2,'2023003001','123',NULL,NULL,10),(4,'T0001','123',NULL,NULL,12),(5,'2023003002','123',NULL,NULL,13),(7,'T0002','123',NULL,NULL,15),(8,'T0003','123',NULL,NULL,16),(10,'20230030001','12345','2024-12-18 17:27:30','2024-12-18 17:27:30',18);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -368,4 +367,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-18 12:56:00
+-- Dump completed on 2024-12-19 14:50:36
