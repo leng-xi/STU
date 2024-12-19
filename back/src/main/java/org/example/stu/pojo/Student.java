@@ -18,7 +18,5 @@ public class Student {
     private String className;
     private Integer personId;
     @TableField(exist = false)
-    private User user;
-    @TableField(exist = false)
     private Person person;
 }

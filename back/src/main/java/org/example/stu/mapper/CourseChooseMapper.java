@@ -1,6 +1,7 @@
 package org.example.stu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.stu.pojo.CourseChoose;
@@ -18,6 +19,6 @@ public interface CourseChooseMapper extends BaseMapper<CourseChoose> {
     List<CourseChoose> selectByStudentId(Integer studentId);
     @Select("select * from course_choose where student_id=#{studentId} and course_id=#{courseId}")
     CourseChoose findByStuentIdAndCourseId(Integer studentId, Integer courseId);
-    @Select("select * from course_choose where student_id=#{studentId} and course_id=#{courseId}")
+    @Delete("delete from course_choose where student_id=#{studentId} and course_id=#{courseId}")
     void deleteByStudentIdAndCourseId(CourseChoose courseChoose);
 }

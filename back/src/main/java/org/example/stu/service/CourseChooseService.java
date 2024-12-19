@@ -7,10 +7,12 @@ import org.example.stu.pojo.Course;
 import org.example.stu.pojo.CourseChoose;
 import org.example.stu.pojo.Person;
 import org.example.stu.pojo.Student;
+import org.example.stu.pojo.vo.CourseChooseVo;
 import org.example.stu.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,41 +25,58 @@ public class CourseChooseService {
     private StudentMapper studentMapper;
     @Autowired
     private PersonMapper personMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     public PageBean page1(Integer page, Integer pageSize,Integer courseId) {
         PageHelper.startPage(page, pageSize);
         List<CourseChoose> courseChooseList = courseChooseMapper.selectAllByCourseId(courseId);
         for (CourseChoose courseChoose : courseChooseList) {
             Person person = personMapper.selectById(studentMapper.selectById(courseChoose.getStudentId()).getPersonId());
-            courseChoose.setStudentName(person.getName());
-            courseChoose.setStudentNum(userMapper.selectByPersonId(person.getId()).getUsername());
-            Course course = courseMapper.selectCourseNumAndCourseNameById(courseChoose.getCourseId());
-            courseChoose.setCourseName(course.getCourseName());
-            courseChoose.setCourseNum(course.getCourseNum());
+               Course course = courseMapper.selectCourseNumAndCourseNameById(courseChoose.getCourseId());
+
         }
         Page<CourseChoose> p = (Page<CourseChoose>) courseChooseList;
         PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
         return pageBean;
     }
-    public PageBean page2(Integer page, Integer pageSize,Integer studentId) {
-        PageHelper.startPage(page, pageSize);
+    public List<CourseChooseVo> getList2(Integer studentId) {
         List<CourseChoose> courseChooseList = courseChooseMapper.selectAllByStudentId(studentId);
-        for (CourseChoose courseChoose : courseChooseList) {
-            Person person = personMapper.selectById(studentMapper.selectById(courseChoose.getStudentId()).getPersonId());
-            courseChoose.setStudentName(person.getName());
-            courseChoose.setStudentNum(userMapper.selectByPersonId(person.getId()).getUsername());
-            Course course = courseMapper.selectCourseNumAndCourseNameById(courseChoose.getCourseId());
-            courseChoose.setCourseName(course.getCourseName());
-            courseChoose.setCourseNum(course.getCourseNum());
+        List<CourseChooseVo> courseChooseVoList = new ArrayList<>();
+        for (CourseChoose courseChoose : courseChooseList){
+            CourseChooseVo courseChooseVo= new CourseChooseVo();
+            courseChooseVo.setId(courseChoose.getId());
+            courseChooseVo.setStudentId(courseChoose.getStudentId());
+            courseChooseVo.setCourseId(courseChoose.getCourseId());
+            courseChooseVo.setScore1(courseChoose.getScore1());
+            courseChooseVo.setScore2(courseChoose.getScore2());
+            courseChooseVo.setScore3(courseChoose.getScore3());
+            Course course = courseMapper.selectById(courseChoose.getCourseId());
+            courseChooseVo.setCourse(course);
+            courseChooseVoList.add(courseChooseVo);
         }
-        Page<CourseChoose> p = (Page<CourseChoose>) courseChooseList;
-        PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
-        return pageBean;
+        return courseChooseVoList;
+    }
+    public List<Course> getList3(Integer studentId) {
+        List<CourseChoose> courseChooseList = courseChooseMapper.selectAllByStudentId(studentId);
+        List<Course> courseList = new ArrayList<>();
+        for (CourseChoose courseChoose : courseChooseList){
+            Course course = courseMapper.selectById(courseChoose.getCourseId());
+            courseList.add(course);
+        }
+        List<Course> allList = courseMapper.selectAll();
+        List<Course> allList2 = courseMapper.selectAll();
+        if(allList.size()==courseList.size())return null;
+        for (Course course : allList){
+            for (Course course1 : courseList){
+                if(course.getId()==course1.getId()){
+                    allList2.remove(course1);
+                }
+            }
+        }
+        return allList2;
     }
     public Integer addCourseChoose(CourseChoose courseChoose){
-        if(courseMapper.selectById(courseChoose.getCourseId()).getIsopen()==0)return 0;
+        Course course = courseMapper.selectById(courseChoose.getCourseId());
+        if(course.getIsopen()==0)return 0;
         List<CourseChoose> courseChooseList = courseChooseMapper.selectByStudentId(courseChoose.getStudentId());
         for (CourseChoose choose : courseChooseList) {
             if (choose.getCourseId().equals(courseChoose.getCourseId()))return 1;

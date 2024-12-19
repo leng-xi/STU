@@ -16,11 +16,6 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    /*
-    查询
-    例 getStudentList?page=1&pageSize=5
-    page 页数
-    pageSize 每页显示的条数    */
     @GetMapping("/getStudentList")
     public Result getStudentList(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer pageSize
@@ -30,32 +25,14 @@ public class StudentController {
         return Result.success(pageBean);
     }
 
-    /*
-    新增
-    传入json格式的字符串
-    样例
-    "major": "2",
-    "className": "2",
-    "person": {
-        "name": "张三2",
-        "type": 1,
-        "dept": "1",
-        "card": null,
-        "gender": 1,
-        "birthday": null,
-        "email": null,
-        "phone": null,
-        "address": null
-    },
-    "user": {
-        "password": "111",
-        "username": "2322"
-    }        */
     @PostMapping("/addStudent")
     public Result addStudent(@RequestBody Student student){
         log.info("新增学生信息:{}",student);
+        if(student.getPerson().getName().isEmpty()||student.getPerson().getName().length()>10)return Result.error("姓名输入不合法");
+        if(student.getPerson().getUsername().isEmpty()||student.getPerson().getUsername().length()>20)return Result.error("学号输入不合法");
+        //if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
         if(!studentService.addStudent(student)){
-            return Result.error("添加失败");
+            return Result.error("该学生已存在");
         }
     return Result.success("添加成功");
     }
@@ -72,30 +49,6 @@ public class StudentController {
         }
         return Result.error("删除失败");
     }
-    /*修改
-    示例(与getStudentList返回值相同,去除新增和修改时间)
-    "id": 1,
-    "major": "1",
-    "className": "1",
-    "personId": 1,
-    "user": {
-        "id": 1,
-        "password": "111",
-        "username": "111",
-        "personId": 1
-    },
-    "person": {
-        "id": 1,
-        "name": "张三",
-        "type": 1,
-        "dept": "1",
-        "card": null,
-        "gender": 1,
-        "birthday": null,
-        "email": null,
-        "phone": null,
-        "address": null
-    }*/
     @PostMapping("/updateStudent")
     public Result updateStudent(@RequestBody Student student){
         log.info("更新学生信息:{}",student);
@@ -104,5 +57,4 @@ public class StudentController {
         }
         return Result.success("更新成功");
     }
-
 }

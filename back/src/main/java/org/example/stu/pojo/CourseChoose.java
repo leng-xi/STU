@@ -14,11 +14,7 @@ import lombok.NoArgsConstructor;
 public class CourseChoose {
     private Integer id;
     private Integer studentId;
-    private String studentName;
-    private String studentNum;
     private Integer courseId;
-    private String courseName;
-    private String courseNum;
     private Integer score1;
     private Integer score2;
     private Integer score3;

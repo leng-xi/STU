@@ -19,12 +19,12 @@ public class CourseChooseController {
     private CourseChooseService courseChooseService;
 
     /*拿到某一个课程的选课列表
-    * score1 平时成绩
-    * score2 作业成绩
-    * score3 考试成绩
-    * score4 总成绩
-    *
-    * */
+     * score1 平时成绩
+     * score2 作业成绩
+     * score3 考试成绩
+     * score4 总成绩
+     *
+     * */
     @GetMapping("/getCourseChooseListFromCourse")
     public Result getCourseChooseListFromCourse(@RequestParam(defaultValue = "1") Integer page,
                                                 @RequestParam(defaultValue = "10") Integer pageSize,
@@ -36,43 +36,53 @@ public class CourseChooseController {
     }
 
     @GetMapping("/getCourseChooseListFromStudent")
-    public Result getCourseChooseListFromStudent(@RequestParam(defaultValue = "1") Integer page,
-                                                @RequestParam(defaultValue = "10") Integer pageSize,
-                                                Integer studentId
-    ) {
-        log.info("分页查询 page={},pageSize={},studentId={}", page, pageSize, studentId);
-        PageBean pageBean = courseChooseService.page2(page, pageSize, studentId);
-        return Result.success(pageBean);
+    public Result getCourseChooseListFromStudent(Integer studentId) {
+        log.info("studentId={}", studentId);
+        return Result.success(courseChooseService.getList2(studentId));
     }
-    /*传入学生id,课程id
-    *
-    *
-    *
-    *
-    * */
+    @GetMapping("/getCourseChooseListFromStudentNot")
+    public Result getCourseChooseListFromStudentNot(Integer studentId) {
+        log.info("studentId={}",studentId);
+        return Result.success(courseChooseService.getList3(studentId));
+    }
     @PostMapping("/addCourseChoose")
-    public Result addCourseChoose(@RequestBody CourseChoose courseChoose){
-        log.info("courseChoose:{}",courseChoose);
-        if(courseChooseService.addCourseChoose(courseChoose)==0){
+    public Result addCourseChoose(@RequestBody CourseChoose courseChoose) {
+        log.info("courseChoose:{}", courseChoose);
+        Integer temp = courseChooseService.addCourseChoose(courseChoose);
+        if (temp == 0) {
             return Result.error("未开课");
         }
-        if(courseChooseService.addCourseChoose(courseChoose)==1){
+        if (temp == 1) {
+            return Result.error("已选课");
+        }
+        return Result.success("添加成功");
+    }
+    @PostMapping("/addCourseChooseWithNum")
+    public Result addCourseChooseWithNum(@RequestBody CourseChoose courseChoose) {
+        log.info("courseChoose:{}", courseChoose);
+        Integer temp = courseChooseService.addCourseChoose(courseChoose);
+        if (temp == 0) {
+            return Result.error("未开课");
+        }
+        if (temp == 1) {
             return Result.error("已存在");
         }
         return Result.success("添加成功");
     }
+
     @PostMapping("/addScore")
-    public Result addScore(@RequestBody CourseChoose courseChoose){
-        log.info("courseChoose:{}",courseChoose);
-        if(!courseChooseService.addScore(courseChoose)){
+    public Result addScore(@RequestBody CourseChoose courseChoose) {
+        log.info("courseChoose:{}", courseChoose);
+        if (!courseChooseService.addScore(courseChoose)) {
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
     }
+
     @PostMapping("/delete")
-    public Result delete(@RequestBody CourseChoose courseChoose){
-        log.info("courseChoose:{}",courseChoose);
-        if(courseChooseService.delete(courseChoose)){
+    public Result delete(@RequestBody CourseChoose courseChoose) {
+        log.info("courseChoose:{}", courseChoose);
+        if (courseChooseService.delete(courseChoose)) {
             return Result.success();
         }
         return Result.error("删除失败");

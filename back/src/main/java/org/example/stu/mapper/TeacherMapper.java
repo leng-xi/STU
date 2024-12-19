@@ -12,4 +12,7 @@ import java.util.List;
 public interface TeacherMapper extends BaseMapper<Teacher> {
     @Select("select * from teacher")
     List<Teacher> selectAll();
+    @Select("select * from teacher where person_id=#{id}")
+    Student selectByPersonId(Integer id);
+
 }

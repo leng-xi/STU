@@ -19,7 +19,4 @@ public class Teacher {
     private Integer personId;
     @TableField(exist = false)
     private Person person;
-    @TableField(exist = false)
-    private User user;
-
 }

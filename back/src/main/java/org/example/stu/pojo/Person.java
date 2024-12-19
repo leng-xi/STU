@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @TableName("person")
 public class Person {
     private Integer id;
+    private String username;
+    private String password;
     private String name;
     private Integer type ;
     private String dept;
