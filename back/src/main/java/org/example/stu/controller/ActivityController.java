@@ -43,6 +43,10 @@ public class ActivityController {
         log.info("分页查询 page={},pageSize={}", page, pageSize);
         return Result.success(activityService.page(page, pageSize,"1"));
     }
+    @GetMapping("/getList")
+    public Result getList(){
+        return Result.success(activityService.getList());
+    }
 
     @GetMapping("/getProcessedActivityList")
     public Result getProcessedActivityList(@RequestParam(defaultValue = "1") Integer page,

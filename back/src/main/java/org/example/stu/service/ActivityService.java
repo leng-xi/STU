@@ -24,6 +24,16 @@ public class ActivityService {
     @Autowired
     private TeacherMapper teacherMapper;
 
+    public List<Activity> getList() {
+        List<Activity> activityList = activityMapper.getList();
+        for (Activity activity : activityList) {
+            activity.setName(activityMapper.selectByNum(activity.getNum()).get(0).getName());
+            activity.setActivityType(activityMapper.selectByNum(activity.getNum()).get(0).getActivityType());
+            activity.setOrganizationalUnit(activityMapper.selectByNum(activity.getNum()).get(0).getOrganizationalUnit());
+        }
+        return activityList;
+    }
+
     public PageBean page(Integer page, Integer pageSize, String select) {
         PageHelper.startPage(page, pageSize);
         List<Activity> activityList = new ArrayList<>();
