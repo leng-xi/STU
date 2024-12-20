@@ -21,4 +21,13 @@ public interface ActivityMapper extends BaseMapper<Activity> {
 
     @Select("select * from studentleave where teacher_id = #{teacherId}")
     List<Activity> selectByTeacherId(Integer teacherId);
+
+
+    @Select("select * from activity where num = #{num}")
+    Activity selectByNum(String num);
+
+    @Select("select * from activity where approve_status = #{select}")
+    List<Activity> selectList(String select);
+    @Select("select * from activity where approve_status != #{select}")
+    List<Activity> selectList1(String select);
 }

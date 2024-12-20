@@ -38,4 +38,5 @@ public class Activity {
     private String studentName;
 
     private String studentNum;
+    private String num;
 }
