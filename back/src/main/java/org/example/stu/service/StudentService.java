@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,24 +23,49 @@ public class StudentService {
     @Autowired
     private StudentDetailMapper studentDetailMapper;
 
-    public PageBean page(Integer page, Integer pageSize) {
+    public PageBean page(Integer page, Integer pageSize, String input, String slect) {
         PageHelper.startPage(page, pageSize);
-        List<Student> studentList = studentMapper.selectAll();
-        for (Student student : studentList) {
-            student.setPerson(personMapper.selectById(student.getPersonId()));
+        List<Student> studentList = new ArrayList<>();
+        List<Person> personList = new ArrayList<>();
+        if (input.isEmpty()) {
+            studentList = studentMapper.selectAll();
+            for (Student student : studentList) {
+                student.setPerson(personMapper.selectById(student.getPersonId()));
+            }
+        } else if (slect.equals("1")) {
+            studentList= studentMapper.selectLikeByName(input);
+            for (Student student : studentList) {
+                student.setPerson(personMapper.selectById(student.getPersonId()));
+            }
+        } else if (slect.equals("2")) {
+            studentList= studentMapper.selectLikeByUsername(input);
+            for (Student student : studentList) {
+                student.setPerson(personMapper.selectById(student.getPersonId()));
+            }
+        } else if (slect.equals("3")) {
+            studentList = studentMapper.selectLikeByMajor(input);
+            for (Student student : studentList) {
+                student.setPerson(personMapper.selectById(student.getPersonId()));
+            }
+        } else if (slect.equals("4")) {
+            studentList = studentMapper.selectLikeByClass(input);
+            for (Student student : studentList) {
+                student.setPerson(personMapper.selectById(student.getPersonId()));
+            }
         }
         Page<Student> p = (Page<Student>) studentList;
-        PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
+        PageBean pageBean = new PageBean(p.getTotal(), p.getResult());
         return pageBean;
     }
+
     public boolean addStudent(Student student) {
-        Person p=student.getPerson();
-        if (personMapper.selectByUsername(p.getUsername())!=null)return false;
+        Person p = student.getPerson();
+        if (personMapper.selectByUsername(p.getUsername()) != null) return false;
         personMapper.insert(p);
         student.setPersonId(p.getId());
         studentMapper.insert(student);
-        StudentDetail studentDetail=new StudentDetail();
-        Honour honour=new Honour();
+        StudentDetail studentDetail = new StudentDetail();
+        Honour honour = new Honour();
         studentDetail.setStudentId(student.getId());
         studentDetailMapper.insert(studentDetail);
         honourMapper.insert(honour);
@@ -47,7 +73,7 @@ public class StudentService {
     }
 
     public boolean deletePerson(int personId) {
-        return personMapper.deleteById(personId)>0;
+        return personMapper.deleteById(personId) > 0;
     }
 
     public boolean updateStudent(Student student) {
@@ -55,13 +81,14 @@ public class StudentService {
         personMapper.updateById(student.getPerson());
         return true;
     }
-    public Integer getStudentIdByCard(String studentNum){
+
+    public Integer getStudentIdByCard(String studentNum) {
         Person per = personMapper.selectByCard(studentNum);
         Student stu = studentMapper.selectByPersonId(per.getId());
         return stu.getId();
     }
 
-    public String getStudentNameByCard(String studentNum){
+    public String getStudentNameByCard(String studentNum) {
         Person per = personMapper.selectByCard(studentNum);
         return per.getName();
     }

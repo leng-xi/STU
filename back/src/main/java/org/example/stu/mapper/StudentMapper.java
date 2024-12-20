@@ -13,4 +13,14 @@ public interface StudentMapper extends BaseMapper<Student> {
     List<Student> selectAll();
     @Select("select * from student where person_id=#{id}")
     Student selectByPersonId(Integer id);
+
+    @Select("select * from student where major like concat('%',#{input},'%')")
+    List<Student> selectLikeByMajor(String input);
+
+    @Select("select * from student where class_name like concat('%',#{input},'%')")
+    List<Student> selectLikeByClass(String input);
+    @Select("select * from person left join student on person.id=student.person_id where person.name like concat('%',#{input},'%')and type=3 ")
+    List<Student> selectLikeByName(String input);
+    @Select("select * from person left join student on person.id=student.person_id where person.username like concat('%',#{input},'%')and type=3")
+    List<Student> selectLikeByUsername(String input);
 }

@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.example.stu.pojo.Person;
+
+import java.util.List;
+
 @Mapper
 public interface PersonMapper extends BaseMapper<Person> {
     @Insert("insert into person(id, name, type, dept, card, gender, birthday, email, phone, address) values(#{id},#{name},#{type},#{dept},#{card},#{gender},#{birthday},#{email},#{phone},#{address})")
@@ -22,4 +25,10 @@ public interface PersonMapper extends BaseMapper<Person> {
     Person selectByUsername(String username);
     @Select("select * from person where card = #{card}")
     Person selectByCard(String card);
+
+    @Select("select * from person where name like concat('%',#{input},'%') and type=3")
+    List<Person> selectLikeByName(String input);
+
+    @Select("select * from person where username like concat('%',#{input},'%')and type=3")
+    List<Person> selectLikeByUsername(String input);
 }

@@ -22,39 +22,25 @@ public class TeacherController {
     pageSize 每页显示的条数    */
     @GetMapping("/getTeacherList")
     public Result getTeacherList(@RequestParam(defaultValue = "1") Integer page,
-                                 @RequestParam(defaultValue = "10") Integer pageSize
-    ){
-        log.info("分页查询 page={},pageSize={}",page,pageSize);
-        PageBean pageBean = teacherService.page(page, pageSize);
+                                 @RequestParam(defaultValue = "10") Integer pageSize,
+                                 @RequestParam(defaultValue = "") String input,
+                                 @RequestParam(defaultValue = "") String select
+    ) {
+        log.info("分页查询 page={},pageSize={},input={},select={}", page, pageSize,input,select);
+        PageBean pageBean = teacherService.page(page, pageSize,input,select);
         return Result.success(pageBean);
     }
 
-    /*
-    新增
-    传入json格式的字符串
-    样例
-    "degree": "2",
-    "title": "2",
-    "person": {
-        "name": "张三2",
-        "type": 1,
-        "dept": "1",
-        "card": null,
-        "gender": 1,
-        "birthday": null,
-        "email": null,
-        "phone": null,
-        "address": null
-    },
-    "user": {
-        "password": "111",
-        "username": "2322"
-    }        */
+
     @PostMapping("/addTeacher")
     public Result addTeacher(@RequestBody Teacher teacher){
         log.info("添加教师信息:{}",teacher);
+        if(teacher.getPerson().getName().isEmpty()||teacher.getPerson().getName().length()>10)return Result.error("姓名输入不合法");
+        if(teacher.getPerson().getUsername().isEmpty()||teacher.getPerson().getUsername().length()>20)return Result.error("用户名输入不合法");
+        //if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
+
         if(!teacherService.addTeacher(teacher)){
-            return Result.error("添加失败");
+            return Result.error("该教师已存在");
         }
         return Result.success("添加成功");
     }
