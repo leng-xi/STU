@@ -18,6 +18,10 @@ public class VolunteerController {
 
     @Autowired
     private StudentService studentService;
+    @GetMapping("/getStudentVolunteerList")
+    public Result getStudentVolunteerList(@RequestParam Integer studentId) {
+        return Result.success(volunteerService.pageStudent(studentId));
+    }
 
     @GetMapping("/getVolunteerList")
     public Result getVolunteerList(@RequestParam(defaultValue = "1") Integer page,

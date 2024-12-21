@@ -65,10 +65,8 @@ public class StudentService {
         student.setPersonId(p.getId());
         studentMapper.insert(student);
         StudentDetail studentDetail = new StudentDetail();
-        Honour honour = new Honour();
         studentDetail.setStudentId(student.getId());
         studentDetailMapper.insert(studentDetail);
-        honourMapper.insert(honour);
         return true;
     }
 
@@ -77,19 +75,40 @@ public class StudentService {
     }
 
     public boolean updateStudent(Student student) {
+        Person temp = personMapper.selectByUsername(student.getPerson().getUsername());
+        if(temp!=null){
+            if (temp.getId() != student.getPerson().getId()) {
+                return false;
+            }
+        }
         studentMapper.updateById(student);
         personMapper.updateById(student.getPerson());
         return true;
     }
 
-    public Integer getStudentIdByCard(String studentNum) {
-        Person per = personMapper.selectByCard(studentNum);
+    public Integer getStudentIdByCard(String studentNum){
+        Person per = personMapper.selectByUsername(studentNum);
         Student stu = studentMapper.selectByPersonId(per.getId());
         return stu.getId();
     }
 
-    public String getStudentNameByCard(String studentNum) {
-        Person per = personMapper.selectByCard(studentNum);
+    public String getStudentNameByCard(String studentNum){
+        Person per = personMapper.selectByUsername(studentNum);
         return per.getName();
+    }
+
+    public String getStudentNumById(Integer studentId){
+        Student student = studentMapper.selectById(studentId);
+        return student.getPerson().getUsername();
+    }
+
+
+
+
+    public Student getList(Integer id) {
+        Student student = studentMapper.selectById(id);
+        student.setStudentDetail(studentDetailMapper.selectByStudentId(id));
+        student.setPerson(personMapper.selectById(student.getPersonId()));
+        return student;
     }
 }

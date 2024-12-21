@@ -19,6 +19,12 @@ public class SocialpraticeController {
     @Autowired
     private StudentService studentService;
 
+
+    @GetMapping("/getStudentSocialpraticeList")
+    public Result getStudentSocialpraticeList(@RequestParam Integer studentId) {
+        return Result.success(socialpraticeService.pageStudent(studentId));
+    }
+
     @GetMapping("/getSocialpraticeList")
     public Result getSocialpraticeList(@RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer pageSize

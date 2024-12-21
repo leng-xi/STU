@@ -1,3 +1,4 @@
+
 package org.example.stu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -23,4 +24,11 @@ public interface StudentleaveMapper extends BaseMapper<Studentleave> {
 
     @Select("select * from studentleave where teacher_id = #{teacherId}")
     List<Studentleave> selectByTeacherId(Integer teacherId);
+
+    @Select("select * from studentleave where student_id = #{studentId} and ((start_data >= #{startData} and start_data <= #{endData}) or (end_data <= #{endData} and end_data >= #{startData}))")
+    List<Studentleave> selectHaveStudentleave(Integer studentId,String startData,String endData);
+
+    @Select("select * from studentleave where student_id = #{studentId} and ((start_data >= #{startData} and start_data <= #{endData}) or (end_data <= #{endData} and end_data >= #{startData})) and id != #{id} ")
+    List<Studentleave> selectHaveUpdateStudentleave(Integer id,Integer studentId,String startData,String endData);
+
 }

@@ -26,7 +26,10 @@ public class SocialpraticeService {
         return pageBean;
     }
 
-
+    public List<Socialpratice> pageStudent(Integer studentId) {
+        List<Socialpratice> socialpraticeList = socialpraticeMapper.selectByStudentId(studentId);
+        return socialpraticeList;
+    }
 
     public boolean addSocialpratice(Socialpratice socialpratice){
         try {

@@ -19,4 +19,6 @@ public class Student {
     private Integer personId;
     @TableField(exist = false)
     private Person person;
+    @TableField(exist = false)
+    private StudentDetail studentDetail;
 }

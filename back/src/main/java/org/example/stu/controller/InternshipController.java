@@ -18,6 +18,10 @@ public class InternshipController {
 
     @Autowired
     private StudentService studentService;
+    @GetMapping("/getStudentInternshipList")
+    public Result getStudentInternshipList(@RequestParam Integer studentId) {
+        return Result.success(internshipService.pageStudent(studentId));
+    }
 
     @GetMapping("/getInternshipList")
     public Result getInternshipList(@RequestParam(defaultValue = "1") Integer page,

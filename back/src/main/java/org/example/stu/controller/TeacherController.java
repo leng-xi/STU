@@ -82,8 +82,10 @@ public class TeacherController {
     @PostMapping("/updateTeacher")
     public Result updateTeacher(@RequestBody Teacher teacher){
         log.info("更新教师信息:{}",teacher);
+        if(teacher.getPerson().getName().isEmpty()||teacher.getPerson().getName().length()>10)return Result.error("姓名输入不合法");
+        if(teacher.getPerson().getUsername().isEmpty()||teacher.getPerson().getUsername().length()>20)return Result.error("用户名输入不合法");
         if(!teacherService.updateTeacher(teacher)){
-            return Result.error("更新失败");
+            return Result.error("用户名已存在");
         }
         return Result.success("更新成功");
     }

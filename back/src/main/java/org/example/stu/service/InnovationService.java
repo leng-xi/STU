@@ -21,6 +21,12 @@ public class InnovationService {
     @Autowired
     private StudentMapper studentMapper;
 
+    public List<Innovation> pageStudent(Integer studentId) {
+        List<Innovation> internshipList = innovationMapper.selectByStudentId(studentId);
+        return internshipList;
+    }
+
+
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         List<Innovation> innovationList = innovationMapper.selectAll();

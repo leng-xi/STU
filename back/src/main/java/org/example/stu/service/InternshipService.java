@@ -18,6 +18,11 @@ public class InternshipService {
     private InternshipMapper internshipMapper;
     @Autowired
     private StudentMapper studentMapper;
+    public List<Internship> pageStudent(Integer studentId) {
+        List<Internship> internshipList = internshipMapper.selectByStudentId(studentId);
+        return internshipList;
+    }
+
 
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);

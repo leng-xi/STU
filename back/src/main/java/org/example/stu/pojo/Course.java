@@ -16,14 +16,14 @@ public class Course {
     private String courseName;
     private String courseNum;
     private String openingUnit;
-    private Integer totalHours;
+    private String totalHours;
     private String credits;
     private String courseType;
-    private Integer time;
+    private String time;
     private String place;
-    private Integer term;
-    private Integer teacherId;
-    private Integer isopen;
+    private String term;
+    private String teacherId;
+    private String isopen;
     private String pre1;
     private String pre2;
 }

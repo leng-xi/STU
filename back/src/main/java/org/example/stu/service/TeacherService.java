@@ -33,12 +33,12 @@ public class TeacherService {
                 teacher.setPerson(personMapper.selectById(teacher.getPersonId()));
             }
         } else if (slect.equals("1")) {
-            teacherList= teacherMapper.selectLikeByName(input);
+            teacherList = teacherMapper.selectLikeByName(input);
             for (Teacher teacher : teacherList) {
                 teacher.setPerson(personMapper.selectById(teacher.getPersonId()));
             }
         } else if (slect.equals("2")) {
-            teacherList= teacherMapper.selectLikeByUsername(input);
+            teacherList = teacherMapper.selectLikeByUsername(input);
             for (Teacher teacher : teacherList) {
                 teacher.setPerson(personMapper.selectById(teacher.getPersonId()));
             }
@@ -60,12 +60,12 @@ public class TeacherService {
 
 
     public boolean addTeacher(Teacher teacher) {
-        Person p=teacher.getPerson();
-        if (personMapper.selectByUsername(p.getUsername())!=null)return false;
+        Person p = teacher.getPerson();
+        if (personMapper.selectByUsername(p.getUsername()) != null) return false;
         personMapper.insert(p);
         teacher.setPersonId(p.getId());
         teacherMapper.insert(teacher);
-        TeacherDetail teacherDetail=new TeacherDetail();
+        TeacherDetail teacherDetail = new TeacherDetail();
         teacherDetail.setTeacherId(teacher.getId());
         teacherDetailMapper.insert(teacherDetail);
         return true;
@@ -75,19 +75,25 @@ public class TeacherService {
         return personMapper.deleteById(personId) > 0;
     }
 
-    public boolean updateTeacher
-            (Teacher teacher) {
+    public boolean updateTeacher(Teacher teacher) {
+        Person temp = personMapper.selectByUsername(teacher.getPerson().getUsername());
+        if(temp!=null){
+            if (temp.getId() != teacher.getPerson().getId()) {
+                return false;
+            }
+        }
         teacherMapper.updateById(teacher);
         personMapper.updateById(teacher.getPerson());
         return true;
     }
-    public Integer getTeacherIdByCard(String teacherNum){
+
+    public Integer getTeacherIdByCard(String teacherNum) {
         Person per = personMapper.selectByUsername(teacherNum);
         Teacher tea = teacherMapper.selectByPersonId(per.getId());
         return tea.getId();
     }
 
-    public String getTeacherNameByCard(String teacherNum){
+    public String getTeacherNameByCard(String teacherNum) {
         Person per = personMapper.selectByUsername(teacherNum);
         return per.getName();
     }

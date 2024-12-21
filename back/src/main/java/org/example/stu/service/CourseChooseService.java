@@ -76,13 +76,15 @@ public class CourseChooseService {
     }
     public Integer addCourseChoose(CourseChoose courseChoose){
         Course course = courseMapper.selectById(courseChoose.getCourseId());
-        if(course.getIsopen()==0)return 0;
+        if(course.getIsopen().equals(0))return 0;
         List<CourseChoose> courseChooseList = courseChooseMapper.selectByStudentId(courseChoose.getStudentId());
         for (CourseChoose choose : courseChooseList) {
+
             if (choose.getCourseId().equals(courseChoose.getCourseId()))return 1;
+            if (courseMapper.selectById(choose.getCourseId()).getTime().equals(course.getTime()))return 2;
         }
         courseChooseMapper.insert(courseChoose);
-        return 2;
+        return 3;
     }
     public Boolean addScore(CourseChoose courseChoose){
         CourseChoose courseChoose1 = courseChooseMapper.findByStuentIdAndCourseId(courseChoose.getStudentId(), courseChoose.getCourseId());
@@ -97,5 +99,16 @@ public class CourseChooseService {
     public boolean delete(CourseChoose courseChoose) {
         courseChooseMapper.deleteByStudentIdAndCourseId(courseChoose);
         return true;
+    }
+
+    public List<CourseChoose> getScore(Integer id) {
+        List<CourseChoose> courseChooseList = courseChooseMapper.selectAllByCourseId(id);
+        for (CourseChoose courseChoose : courseChooseList) {
+            Student student=studentMapper.selectById(courseChoose.getStudentId());
+            courseChoose.setCourse(courseMapper.selectById(courseChoose.getCourseId()));
+            courseChoose.setStudent(student);
+            courseChoose.setPerson(personMapper.selectById(student.getPersonId()));
+        }
+        return courseChooseList;
     }
 }

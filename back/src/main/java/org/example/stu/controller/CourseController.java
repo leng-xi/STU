@@ -36,35 +36,51 @@ public class CourseController {
     */
     @GetMapping("/getCourseList")
     public Result getCourseList(@RequestParam(defaultValue = "1") Integer page,
-                                 @RequestParam(defaultValue = "10") Integer pageSize
-    )
-    {
+                                @RequestParam(defaultValue = "10") Integer pageSize
+    ) {
         log.info("分页查询 page={},pageSize={}", page, pageSize);
         PageBean pageBean = courseService.page(page, pageSize);
         return Result.success(pageBean);
     }
+
     @PostMapping("/addCourse")
-    public Result addCourse(@RequestBody Course course){
-        log.info("新增课程信息:{}",course);
-        if(!courseService.addCourse(course)){
-            return Result.error("添加失败");
+    public Result addCourse(@RequestBody Course course) {
+        log.info("新增课程信息:{}", course);
+        if (course.getCourseName() == "") return Result.error("课程名不能为空");
+        if (course.getCourseNum() == "") return Result.error("课程号不能为空");
+        if (course.getOpeningUnit() == "") return Result.error("开课单位不能为空");
+        if (course.getTotalHours() == "") return Result.error("总学时不能为空");
+        if (course.getCredits() == "") return Result.error("学分不能为空");
+        if (course.getCourseType() ==null) return Result.error("课程类型不能为空");
+        if (course.getPlace() == "") return Result.error("上课地点不能为空");
+        if (!courseService.addCourse(course)) {
+            return Result.error("课程已存在");
         }
         return Result.success("添加成功");
     }
+
     @PostMapping("/deleteCourse")
-    public Result deleteCourse(@RequestBody Course course){
+    public Result deleteCourse(@RequestBody Course course) {
         int courseId = course.getId();
-        log.info("删除课程id:{}",courseId);
-        if(courseService.deleteCourse(courseId)){
+        log.info("删除课程id:{}", courseId);
+        if (courseService.deleteCourse(courseId)) {
             return Result.success();
         }
         return Result.error("删除失败");
     }
+
     @PostMapping("/updateCourse")
-    public Result updateCourse(@RequestBody Course course){
-        log.info("更新课程信息:{}",course);
-        if(!courseService.updateCourse(course)){
-                return Result.error("更新失败");
+    public Result updateCourse(@RequestBody Course course) {
+        if (course.getCourseName() == "") return Result.error("课程名不能为空");
+        if (course.getCourseNum() == "") return Result.error("课程号不能为空");
+        if (course.getOpeningUnit() == "") return Result.error("开课单位不能为空");
+        if (course.getTotalHours() == "") return Result.error("总学时不能为空");
+        if (course.getCredits() == "") return Result.error("学分不能为空");
+        if (course.getCourseType() ==null) return Result.error("课程类型不能为空");
+        if (course.getPlace() == "") return Result.error("上课地点不能为空");
+        log.info("更新课程信息:{}", course);
+        if (!courseService.updateCourse(course)) {
+            return Result.error("课序号已存在");
         }
         return Result.success("更新成功");
     }

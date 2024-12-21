@@ -26,7 +26,11 @@ public class StudentController {
         PageBean pageBean = studentService.page(page, pageSize,input,select);
         return Result.success(pageBean);
     }
-
+    @GetMapping("/getList")
+    public Result getList(@RequestParam Integer id) {
+        log.info("id:{}", id);
+        return Result.success(studentService.getList(id));
+    }
     @PostMapping("/addStudent")
     public Result addStudent(@RequestBody Student student) {
         log.info("新增学生信息:{}", student);
@@ -57,8 +61,12 @@ public class StudentController {
     @PostMapping("/updateStudent")
     public Result updateStudent(@RequestBody Student student) {
         log.info("更新学生信息:{}", student);
+        if (student.getPerson().getName().isEmpty() || student.getPerson().getName().length() > 10)
+            return Result.error("姓名输入不合法");
+        if (student.getPerson().getUsername().isEmpty() || student.getPerson().getUsername().length() > 20)
+            return Result.error("学号输入不合法");
         if (!studentService.updateStudent(student)) {
-            return Result.error("更新失败");
+            return Result.error("学号已存在");
         }
         return Result.success("更新成功");
     }

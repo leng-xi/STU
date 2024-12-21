@@ -55,6 +55,9 @@ public class CourseChooseController {
         if (temp == 1) {
             return Result.error("已选课");
         }
+        if (temp == 2) {
+            return Result.error("时间冲突");
+        }
         return Result.success("添加成功");
     }
     @PostMapping("/addCourseChooseWithNum")
@@ -77,6 +80,11 @@ public class CourseChooseController {
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+    @GetMapping("/getScore")
+    public Result getScore(@RequestParam Integer id) {
+        log.info("id:{}", id);
+        return Result.success(courseChooseService.getScore(id));
     }
 
     @PostMapping("/delete")

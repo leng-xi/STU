@@ -1,3 +1,4 @@
+
 package org.example.stu.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -34,25 +35,14 @@ public class Honour  {
      */
     private Integer studentId;
 
-    /**
-     * 荣誉
-     */
-    private String award;
+    private String studentName;
 
-    /**
-     * 竞赛
-     */
-    private String competition;
+    private String studentNum;
 
-    /**
-     * 实习经历
-     */
-    private String train;
+    private String name;
 
-    /**
-     * 科研成果
-     */
-    private String scientific;
+    private String honorLevel;
 
+    private String time;
 
 }

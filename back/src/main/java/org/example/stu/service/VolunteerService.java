@@ -19,6 +19,11 @@ public class VolunteerService {
     @Autowired
     private StudentMapper studentMapper;
 
+    public List<Volunteer> pageStudent(Integer studentId) {
+        List<Volunteer> volunteerList = volunteerMapper.selectByStudentId(studentId);
+        return volunteerList;
+    }
+
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         List<Volunteer> volunteerList = volunteerMapper.selectAll();

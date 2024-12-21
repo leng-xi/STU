@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import org.example.stu.mapper.StudentMapper;
 import org.example.stu.mapper.StudentleaveMapper;
 import org.example.stu.mapper.TeacherMapper;
+import org.example.stu.pojo.Internship;
 import org.example.stu.pojo.Studentleave;
 import org.example.stu.utils.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,20 @@ public class StudentleaveService {
     private StudentMapper studentMapper;
     @Autowired
     private TeacherMapper teacherMapper;
+
+
+
+    public List<Studentleave> pageStudent(Integer studentId) {
+        List<Studentleave> studentleaveList = studentleaveMapper.selectByStudentId(studentId);
+        return studentleaveList;
+    }
+    public PageBean pageStudent(Integer page, Integer pageSize,Integer studentId) {
+        PageHelper.startPage(page, pageSize);
+        List<Studentleave> studentleaveList = studentleaveMapper.selectByStudentId(studentId);
+        Page<Studentleave> p = (Page<Studentleave>) studentleaveList;
+        PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
+        return pageBean;
+    }
 
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
@@ -101,4 +116,14 @@ public class StudentleaveService {
             throw new RuntimeException("Failed to update studentleave", e);
         }
     }
+    public boolean haveStudentleave(Integer studentId,String startData,String endData){
+        List<Studentleave> studentleaves = studentleaveMapper.selectHaveStudentleave(studentId,startData,endData);
+        return studentleaves.size() > 0;
+    }
+
+    public boolean haveUpdateStudentleave(Integer id,Integer studentId,String startData,String endData){
+        List<Studentleave> studentleaves = studentleaveMapper.selectHaveUpdateStudentleave(id,studentId,startData,endData);
+        return studentleaves.size() > 0;
+    }
+
 }

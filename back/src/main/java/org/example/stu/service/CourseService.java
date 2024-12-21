@@ -40,6 +40,7 @@ public class CourseService {
     }
 
     public boolean addCourse(Course course) {
+        if(courseMapper.selectByCourseNum(course)!=null){return false;}
         return courseMapper.insert(course) > 0;
     }
 
@@ -48,6 +49,12 @@ public class CourseService {
     }
 
     public boolean updateCourse(Course course) {
+        Course temp = courseMapper.selectByCourseNum(course);
+        if(temp!=null){
+            if (temp.getId() != course.getId()) {
+                return false;
+            }
+        }
         courseMapper.updateById(course);
         return true;
     }

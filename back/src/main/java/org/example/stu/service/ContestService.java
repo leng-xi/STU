@@ -19,6 +19,11 @@ public class ContestService {
     @Autowired
     private StudentMapper studentMapper;
 
+
+    public List<Contest> pageStudent(Integer studentId) {
+        List<Contest> contestList = contestMapper.selectByStudentId(studentId);
+        return contestList;
+    }
     public PageBean page(Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         List<Contest> contestList = contestMapper.selectAll();
@@ -64,3 +69,4 @@ public class ContestService {
         }
     }
 }
+

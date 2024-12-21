@@ -19,6 +19,11 @@ public class InnovationController {
     @Autowired
     private StudentService studentService;
 
+    @GetMapping("/getStudentInnovationList")
+    public Result getStudentInnovationList(@RequestParam Integer studentId) {
+        return Result.success(innovationService.pageStudent(studentId));
+    }
+
     @GetMapping("/getInnovationList")
     public Result getInnovationList(@RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer pageSize
