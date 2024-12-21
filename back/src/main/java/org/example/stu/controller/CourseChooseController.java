@@ -95,4 +95,12 @@ public class CourseChooseController {
         }
         return Result.error("删除失败");
     }
+    @PostMapping("/update")
+    public Result update(@RequestBody CourseChoose courseChoose) {
+        log.info("courseChoose:{}", courseChoose);
+        if (courseChooseService.update(courseChoose)) {
+            return Result.success();
+        }
+        return Result.error("删除失败");
+    }
 }

@@ -57,6 +57,15 @@ public class StudentController {
         }
         return Result.error("删除失败");
     }
+    @GetMapping("/password")
+    public Result password(@RequestParam(defaultValue = "") String personId,
+                           @RequestParam(defaultValue = "") String old,
+                           @RequestParam(defaultValue = "") String newp) {
+        if (studentService.password(personId,old, newp)) {
+            return Result.success("修改成功");
+        }
+        return Result.error("密码错误");
+    }
 
     @PostMapping("/updateStudent")
     public Result updateStudent(@RequestBody Student student) {

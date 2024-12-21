@@ -111,4 +111,12 @@ public class StudentService {
         student.setPerson(personMapper.selectById(student.getPersonId()));
         return student;
     }
+
+    public boolean password(String personId, String old, String newp) {
+        Person person = personMapper.selectById(Integer.parseInt(personId));
+        if(!person.getPassword().equals(old))return false;
+        person.setPassword(newp);
+        personMapper.updateById(person);
+        return true;
+    }
 }

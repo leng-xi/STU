@@ -86,10 +86,11 @@ public class CourseChooseService {
         courseChooseMapper.insert(courseChoose);
         return 3;
     }
-    public Boolean addScore(CourseChoose courseChoose){
-        CourseChoose courseChoose1 = courseChooseMapper.findByStuentIdAndCourseId(courseChoose.getStudentId(), courseChoose.getCourseId());
-        if (courseChoose1!=null){return false;}
-        Course course=courseMapper.selectById(courseChoose.getCourseId());
+    public Boolean addScore(CourseChoose c){
+        CourseChoose courseChoose = courseChooseMapper.selectById(c.getId());
+        Course course = courseMapper.selectById(courseChoose.getCourseId());
+        courseChoose.setScore1(c.getScore1());
+        courseChoose.setScore2(c.getScore2());
         int score3=courseChoose.getScore1()*Integer.parseInt(course.getPre1())+courseChoose.getScore2()*Integer.parseInt(course.getPre2());
         courseChoose.setScore3(score3/100);
         courseChooseMapper.updateById(courseChoose);
@@ -110,5 +111,9 @@ public class CourseChooseService {
             courseChoose.setPerson(personMapper.selectById(student.getPersonId()));
         }
         return courseChooseList;
+    }
+
+    public boolean update(CourseChoose courseChoose) {
+            return false;
     }
 }
