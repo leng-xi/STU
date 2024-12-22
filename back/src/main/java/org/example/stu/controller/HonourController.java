@@ -2,6 +2,7 @@ package org.example.stu.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.jdbc.Null;
 import org.example.stu.pojo.Honour;
 import org.example.stu.pojo.Honour;
 import org.example.stu.service.HonourService;
@@ -9,6 +10,8 @@ import org.example.stu.service.StudentService;
 import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -40,6 +43,8 @@ public class HonourController {
 
     @GetMapping("/getHonour")
     public Result getHonour(){
+        log.info("查询所有荣誉信息");
+        System.out.println(honourService.getAllHonours());
         return Result.success(honourService.getAllHonours());
     }
 
@@ -51,14 +56,20 @@ public class HonourController {
             return Result.error("学生学号与姓名不匹配");
         }
         honour.setStudentId(studentService.getStudentIdByCard(honour.getStudentNum()));
-        if(honour.getHonorLevel().isEmpty())Result.error("荣誉等级不合法");
-        if(honour.getTime().isEmpty())Result.error("获得日期不合法");
-        if(honour.getName().isEmpty())Result.error("荣誉名字输入不合法");
+        if(honour.getHonorLevel().isEmpty())return Result.error("荣誉等级不合法");
+
+        if(honour.getTime() == null)return Result.error("获得日期不合法");
+        if(honour.getTime().compareTo(toString(LocalDate.now()))>0) return Result.error("获得日期不应该晚于今天");
+        if(honour.getName().isEmpty())return Result.error("荣誉名字输入不合法");
         log.info("新增学生的荣誉信息:{}",honour);
         if(!honourService.addHonour(honour)){
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+
+    private String toString(LocalDate now) {
+        return now.toString();
     }
 
     @PostMapping("/deleteHonour")
@@ -78,9 +89,11 @@ public class HonourController {
             return Result.error("学生学号与姓名不匹配");
         }
         honour.setStudentId(studentService.getStudentIdByCard(honour.getStudentNum()));
-        if(honour.getHonorLevel().isEmpty())Result.error("荣誉等级不合法");
-        if(honour.getTime().isEmpty())Result.error("获得日期不合法");
-        if(honour.getName().isEmpty())Result.error("荣誉名字输入不合法");
+        if(honour.getHonorLevel().isEmpty())return Result.error("荣誉等级不合法");
+
+        if(honour.getTime() == null)return Result.error("获得日期不合法");
+        if(honour.getTime().compareTo(toString(LocalDate.now()))>0) return Result.error("获得日期不应该晚于今天");
+        if(honour.getName().isEmpty())return Result.error("荣誉名字输入不合法");
         log.info("更新荣誉信息:{}",honour);
         if(!honourService.updateHonour(honour)){
             return Result.error("更新失败");

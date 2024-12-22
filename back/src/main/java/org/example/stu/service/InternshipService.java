@@ -24,12 +24,11 @@ public class InternshipService {
     }
 
 
-    public PageBean page(Integer page, Integer pageSize) {
-        PageHelper.startPage(page, pageSize);
+    public List<Internship> page() {
+
         List<Internship> internshipList = internshipMapper.selectAll();
-        Page<Internship> p = (Page<Internship>) internshipList;
-        PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
-        return pageBean;
+
+        return internshipList;
     }
 
 

@@ -8,6 +8,8 @@ import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Slf4j
 @RestController
 @RequestMapping("/internship")
@@ -24,11 +26,8 @@ public class InternshipController {
     }
 
     @GetMapping("/getInternshipList")
-    public Result getInternshipList(@RequestParam(defaultValue = "1") Integer page,
-                                 @RequestParam(defaultValue = "10") Integer pageSize
-    ) {
-        log.info("分页查询 page={},pageSize={}",page,pageSize);
-        return Result.success(internshipService.page(page, pageSize));
+    public Result getInternshipList() {
+        return Result.success(internshipService.page());
     }
 
     /*
@@ -47,15 +46,33 @@ public class InternshipController {
     @PostMapping("/addInternship")
     public Result addInternship(@RequestBody Internship internship){
         String name = studentService.getStudentNameByCard(internship.getStudentNum());
+        if(name == null)return Result.error("学生学号不存在");
+        if(internship.getStudentName()==null||internship.getStudentNum().length()>10)return Result.error("学生姓名输入不合法");
+        if(internship.getStudentNum()==null||internship.getStudentNum().length()>20)return Result.error("学生学号输入不合法");
         if(!name.equals(internship.getStudentName())){
             return Result.error("学生姓名与学号不匹配");
-
         }
+
+        Integer studentId = studentService.getStudentIdByCard(internship.getStudentNum());
+        internship.setStudentId(studentId);
+        if(internship.getUnit()==null)return Result.error("实习单位输入不合法");
+        if(internship.getPost()==null)return Result.error("实习岗位输入不合法");
+        if(internship.getStartData()==null)return Result.error("实习开始时间输入不合法");
+        if(internship.getEndData()==null)return Result.error("实习结束时间输入不合法");
+        if(internship.getStartData().compareTo(internship.getEndData())>0)return Result.error("实习开始时间不能早于实习结束时间");
+        if(internship.getEndData().compareTo(toString(LocalDate.now()))>0) return Result.error("实习结束时间不应该晚于今天");
+        if(internship.getCertifier()==null)return Result.error("实习证明人输入不合法");
+        if(internship.getEvaluate()==null)return Result.error("实习评价输入不合法");
+
         log.info("新增学生的校外实习信息:{}",internship);
         if(!internshipService.addInternship(internship)){
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+
+    private String toString(LocalDate now) {
+        return now.toString();
     }
 
     @PostMapping("/deleteInternship")

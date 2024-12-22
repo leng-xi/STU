@@ -35,11 +35,10 @@ public class StudentleaveController {
     }
 
     @PostMapping("/addStudentStudentleave")
-    public Result addStudentStudentleave(@RequestBody Studentleave leave,Integer studentId){
-        leave.setStudentId(studentId);
-        leave.setStudentId(studentId);
-        leave.setStudentNum(studentService.getStudentNumById(studentId));
-        leave.setStudentName(studentService.getStudentNameByCard(studentService.getStudentNumById(studentId)));
+    public Result addStudentStudentleave(@RequestBody Studentleave leave){
+        leave.setStudentId(leave.getStudentId());
+        leave.setStudentNum(studentService.getStudentNumById(leave.getStudentId()));
+        leave.setStudentName(studentService.getStudentNameByCard(studentService.getStudentNumById(leave.getStudentId())));
 
         if(leave.getTeacherName().isEmpty()||leave.getTeacherName().length()>10)return Result.error("审批老师姓名输入不合法");
         if(leave.getTeacherNum().isEmpty()||leave.getTeacherNum().length()>20)return Result.error("审批老师工号输入不合法");
@@ -48,9 +47,10 @@ public class StudentleaveController {
         }
         if (leave.getStudentleaveType().isEmpty()||leave.getStudentleaveType().length()>10)return Result.error("请假类型输入不合法");
         if (leave.getStudentleaveReason().isEmpty()||leave.getStudentleaveReason().length()>100)return Result.error("请假原因输入不合法");
-        if (leave.getStartData().isEmpty())return Result.error("请假开始时间输入不合法");
-        if (leave.getEndData().isEmpty())return Result.error("请假结束时间输入不合法");
-        if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("请假时间冲突");
+        if (leave.getStartData()==null)return Result.error("请假开始时间输入不合法");
+        if (leave.getEndData()==null)return Result.error("请假结束时间输入不合法");
+        if(leave.getStartData().compareTo(leave.getEndData())>0)return Result.error("请假回校时间不能早于离校时间");
+        if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("与已经有的请假时间冲突");
         log.info("新增学生的请假信息:{}",leave);
         if(!leaveService.addStudentleave(leave)){
             return Result.error("申请失败");
@@ -108,7 +108,10 @@ public class StudentleaveController {
         if (leave.getStudentleaveReason().isEmpty()||leave.getStudentleaveReason().length()>100)return Result.error("请假原因输入不合法");
         if (leave.getStartData().isEmpty())return Result.error("请假开始时间输入不合法");
         if (leave.getEndData().isEmpty())return Result.error("请假结束时间输入不合法");
+        if(leave.getStartData().compareTo(leave.getEndData())>0)return Result.error("请假回校时间不能早于离校时间");
+
         if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("请假时间冲突");
+        if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("与已经有的请假时间冲突");
         log.info("新增学生的请假信息:{}",leave);
         if(!leaveService.addStudentleave(leave)){
             return Result.error("添加失败");
@@ -136,12 +139,12 @@ public class StudentleaveController {
        }*/
     @PostMapping("/updateStudentleave")
     public Result updateStudentleave(@RequestBody Studentleave leave){
-        if(leave.getStudentName().isEmpty()||leave.getStudentNum().length()>10)return Result.error("学生姓名输入不合法");
-        if(leave.getStudentNum().isEmpty()||leave.getStudentNum().length()>20)return Result.error("学生学号输入不合法");
-        if(!leave.getStudentName().equals(studentService.getStudentNameByCard(leave.getStudentNum()))){
-            return Result.error("学生学号与姓名不匹配");
-        }
-        leave.setStudentId(studentService.getStudentIdByCard(leave.getStudentNum()));
+
+        leave.setStudentId(leave.getStudentId());
+        leave.setStudentNum(studentService.getStudentNumById(leave.getStudentId()));
+        leave.setStudentName(studentService.getStudentNameByCard(studentService.getStudentNumById(leave.getStudentId())));
+        Integer studentId = studentService.getStudentIdByCard(leave.getStudentNum());
+        leave.setStudentId(studentId);
         if(leave.getTeacherName().isEmpty()||leave.getTeacherName().length()>10)return Result.error("审批老师姓名输入不合法");
         if(leave.getTeacherNum().isEmpty()||leave.getTeacherNum().length()>20)return Result.error("审批老师工号输入不合法");
         if(!leave.getTeacherName().equals(teacherService.getTeacherNameByCard(leave.getTeacherNum()))){
@@ -149,9 +152,10 @@ public class StudentleaveController {
         }
         if (leave.getStudentleaveType().isEmpty()||leave.getStudentleaveType().length()>10)return Result.error("请假类型输入不合法");
         if (leave.getStudentleaveReason().isEmpty()||leave.getStudentleaveReason().length()>100)return Result.error("请假原因输入不合法");
-        if (leave.getStartData().isEmpty())return Result.error("请假开始时间输入不合法");
-        if (leave.getEndData().isEmpty())return Result.error("请假结束时间输入不合法");
-        if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("请假时间冲突");
+        if (leave.getStartData()==null)return Result.error("请假开始时间输入不合法");
+        if (leave.getEndData()==null)return Result.error("请假结束时间输入不合法");
+        if(leave.getStartData().compareTo(leave.getEndData())>0)return Result.error("请假回校时间不能早于离校时间");
+        if(leaveService.haveStudentleave(leave.getStudentId(),leave.getStartData(),leave.getEndData()))return Result.error("与已经有的请假时间冲突");
         log.info("更新竞赛信息:{}",leave);
         if(!leaveService.updateStudentleave(leave)){
             return Result.error("更新失败");

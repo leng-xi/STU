@@ -21,16 +21,18 @@ public class StudentController {
                                  @RequestParam(defaultValue = "10") Integer pageSize,
                                  @RequestParam(defaultValue = "") String input,
                                  @RequestParam(defaultValue = "") String select
-                                 ) {
-        log.info("分页查询 page={},pageSize={},input={},select={}", page, pageSize,input,select);
-        PageBean pageBean = studentService.page(page, pageSize,input,select);
+    ) {
+        log.info("分页查询 page={},pageSize={},input={},select={}", page, pageSize, input, select);
+        PageBean pageBean = studentService.page(page, pageSize, input, select);
         return Result.success(pageBean);
     }
+
     @GetMapping("/getList")
     public Result getList(@RequestParam Integer id) {
         log.info("id:{}", id);
         return Result.success(studentService.getList(id));
     }
+
     @PostMapping("/addStudent")
     public Result addStudent(@RequestBody Student student) {
         log.info("新增学生信息:{}", student);
@@ -57,11 +59,21 @@ public class StudentController {
         }
         return Result.error("删除失败");
     }
+
     @GetMapping("/password")
     public Result password(@RequestParam(defaultValue = "") String personId,
                            @RequestParam(defaultValue = "") String old,
                            @RequestParam(defaultValue = "") String newp) {
-        if (studentService.password(personId,old, newp)) {
+        if(newp.equals(""))return Result.error("新密码不能为空");
+        if (studentService.password(personId, old, newp)) {
+            return Result.success("修改成功");
+        }
+        return Result.error("密码错误");
+    }
+
+    @GetMapping("/reset")
+    public Result reset(@RequestParam(defaultValue = "") String personId) {
+        if (studentService.reset(personId)) {
             return Result.success("修改成功");
         }
         return Result.error("密码错误");

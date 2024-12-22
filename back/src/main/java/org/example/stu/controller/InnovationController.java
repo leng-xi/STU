@@ -8,6 +8,8 @@ import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Slf4j
 @RestController
 @RequestMapping("/innovation")
@@ -25,18 +27,14 @@ public class InnovationController {
     }
 
     @GetMapping("/getInnovationList")
-    public Result getInnovationList(@RequestParam(defaultValue = "1") Integer page,
-                                    @RequestParam(defaultValue = "10") Integer pageSize
+    public Result getInnovationList(
     ) {
-        log.info("分页查询 page={},pageSize={}",page,pageSize);
-        return Result.success(innovationService.page(page, pageSize));
+
+        return Result.success(innovationService.page());
     }
 
 
-   /* @GetMapping("/getInnovationListByStudentId")
-    public Result getInnovationListByStudentId(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "1") Integer studentId) {
-        return Result.success(innovationService.pageByStudentId(page, pageSize, studentId));
-    }*/
+
 
     /*
     "id": 1,
@@ -72,14 +70,30 @@ public class InnovationController {
     @PostMapping("/addInnovation")
     public Result addInnovation(@RequestBody Innovation innovation){
         String name = studentService.getStudentNameByCard(innovation.getStudentNum());
+        if(name == null)return Result.error("学生学号不存在");
+        if(innovation.getStudentName()==null||innovation.getStudentNum().length()>10)return Result.error("学生姓名输入不合法");
+        if(innovation.getStudentNum()==null||innovation.getStudentNum().length()>20)return Result.error("学生学号输入不合法");
         if(!name.equals(innovation.getStudentName())){
             return Result.error("学生姓名与学号不匹配");
-
-        }        log.info("新增学生的创业项目信息:{}",innovation);
+        }
+        Integer studentId = studentService.getStudentIdByCard(innovation.getStudentNum());
+        innovation.setStudentId(studentId);
+        if(innovation.getContent() == null)return Result.error("项目内容输入不合法");
+        if(innovation.getData1() == null)return Result.error("项目开始时间输入不合法");
+        if(innovation.getData2() == null)return Result.error("项目结束时间输入不合法");
+        if(innovation.getData1().compareTo(innovation.getData2())>0)return Result.error("项目开始时间不能早于项目结束时间");
+        if(innovation.getData2().compareTo(toString(LocalDate.now()))>0) return Result.error("项目结束时间不应该晚于今天");
+        if(innovation.getProject() == null)return Result.error("项目名称输入不合法");
+        if(innovation.getTutor() == null)return Result.error("指导老师输入不合法");
+        log.info("新增学生的创业项目信息:{}",innovation);
         if(!innovationService.addInnovation(innovation)){
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+
+    private String toString(LocalDate now) {
+        return now.toString();
     }
 
     @PostMapping("/deleteInnovation")

@@ -27,12 +27,11 @@ public class InnovationService {
     }
 
 
-    public PageBean page(Integer page, Integer pageSize) {
-        PageHelper.startPage(page, pageSize);
+    public List<Innovation> page() {
+
         List<Innovation> innovationList = innovationMapper.selectAll();
-        Page<Innovation> p = (Page<Innovation>) innovationList;
-        PageBean pageBean=new PageBean(p.getTotal(),p.getResult());
-        return pageBean;
+
+        return innovationList;
     }
   /*  public Object pageByStudentId(Integer page, Integer pageSize, Integer studentId) {
         PageHelper.startPage(page, pageSize);
@@ -81,4 +80,3 @@ public class InnovationService {
     }
 
 }
-

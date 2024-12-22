@@ -8,6 +8,8 @@ import org.example.stu.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Slf4j
 @RestController
 @RequestMapping("/volunteer")
@@ -25,7 +27,7 @@ public class VolunteerController {
 
     @GetMapping("/getVolunteerList")
     public Result getVolunteerList(@RequestParam(defaultValue = "1") Integer page,
-                                    @RequestParam(defaultValue = "10") Integer pageSize
+                                   @RequestParam(defaultValue = "10") Integer pageSize
     ) {
         log.info("分页查询 page={},pageSize={}",page,pageSize);
         return Result.success(volunteerService.page(page, pageSize));
@@ -47,15 +49,30 @@ public class VolunteerController {
     @PostMapping("/addVolunteer")
     public Result addVolunteer(@RequestBody Volunteer volunteer){
         String name = studentService.getStudentNameByCard(volunteer.getStudentNum());
+        if(name == null)return Result.error("学生学号不存在");
+        if(volunteer.getStudentName()==null||volunteer.getStudentNum().length()>10)return Result.error("学生姓名输入不合法");
+        if(volunteer.getStudentNum()==null||volunteer.getStudentNum().length()>20)return Result.error("学生学号输入不合法");
         if(!name.equals(volunteer.getStudentName())){
             return Result.error("学生姓名与学号不匹配");
-
         }
+        Integer studentId = studentService.getStudentIdByCard(volunteer.getStudentNum());
+        volunteer.setStudentId(studentId);
+        if(volunteer.getUnit()==null)return Result.error("志愿服务单位输入不合法");
+        if(volunteer.getHour()==null)return Result.error("志愿服务时长输入不合法");
+        if(volunteer.getContent()==null)return Result.error("志愿服务内容输入不合法");
+        if(volunteer.getCertifier()==null)return Result.error("志愿服务证明人输入不合法");
+        if(volunteer.getEvaluate()==null)return Result.error("志愿服务评价输入不合法");
+        if(volunteer.getDate() == null)return Result.error("志愿服务日期输入不合法");
+        if(volunteer.getDate().compareTo(toString(LocalDate.now()))>0) return Result.error("志愿服务日期不应该晚于今天");
         log.info("新增学生的志愿服务信息:{}",volunteer);
         if(!volunteerService.addVolunteer(volunteer)){
             return Result.error("添加失败");
         }
         return Result.success("添加成功");
+    }
+
+    private String toString(LocalDate now) {
+        return now.toString();
     }
 
     @PostMapping("/deleteVolunteer")

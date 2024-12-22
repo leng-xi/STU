@@ -25,9 +25,9 @@ public class Volunteer {
 
     private String evaluate;
 
-    private String startData;
+    private String hour;
 
-    private String endData;
+    private String date;
 
     private String certifier;
 

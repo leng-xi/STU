@@ -119,4 +119,10 @@ public class StudentService {
         personMapper.updateById(person);
         return true;
     }
+    public boolean reset(String personId) {
+        Person person = personMapper.selectById(Integer.parseInt(personId));
+        person.setPassword("123");
+        personMapper.updateById(person);
+        return true;
+    }
 }
