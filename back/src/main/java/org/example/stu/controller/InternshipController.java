@@ -59,7 +59,7 @@ public class InternshipController {
         if(internship.getPost()==null)return Result.error("实习岗位输入不合法");
         if(internship.getStartData()==null)return Result.error("实习开始时间输入不合法");
         if(internship.getEndData()==null)return Result.error("实习结束时间输入不合法");
-        if(internship.getStartData().compareTo(internship.getEndData())>0)return Result.error("实习开始时间不能早于实习结束时间");
+        if(internship.getStartData().compareTo(internship.getEndData())>0)return Result.error("实习开始时间不能晚于实习结束时间");
         if(internship.getEndData().compareTo(toString(LocalDate.now()))>0) return Result.error("实习结束时间不应该晚于今天");
         if(internship.getCertifier()==null)return Result.error("实习证明人输入不合法");
         if(internship.getEvaluate()==null)return Result.error("实习评价输入不合法");

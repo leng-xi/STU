@@ -25,15 +25,12 @@ public class ActivityController {
     @Autowired
     private TeacherService teacherService;
 
-    @PostMapping("/addActivitypopList")
-    public Result addActivitypopList(@RequestBody Activity activity) {
-        if (activity.getNum().isEmpty()) {
-            return Result.error("活动编号不能为空");
-        }
-        if (activity.getName().isEmpty()) return Result.error("活动名称输入不合法");
-        if (activity.getOrganizationalUnit().isEmpty()) return Result.error("活动组织单位输入不合法");
-        if (activity.getActivityType().isEmpty()) Result.error("活动类型输入不合法");
-        return Result.success(activityService.addActivity(activity));
+    @GetMapping("/add")
+    public Result addActivitypopList(@RequestParam Integer studentId,
+                                     @RequestParam String activityNum) {
+        log.info("学生{}申请活动{}", studentId, activityNum);
+        if(!activityService.add(studentId,activityNum))return Result.error("活动已申请");
+         return Result.success();
     }
 
     @GetMapping("/getMyActivityChooseList")

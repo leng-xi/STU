@@ -94,15 +94,16 @@ public class StudentService {
 
     public String getStudentNameByCard(String studentNum){
         Person per = personMapper.selectByUsername(studentNum);
+        if(per==null)return null;
         return per.getName();
     }
 
     public String getStudentNumById(Integer studentId){
+
         Student student = studentMapper.selectById(studentId);
-        return student.getPerson().getUsername();
+        Person per = personMapper.selectById(student.getPersonId());
+        return per.getUsername();
     }
-
-
 
 
     public Student getList(Integer id) {
@@ -123,6 +124,23 @@ public class StudentService {
         Person person = personMapper.selectById(Integer.parseInt(personId));
         person.setPassword("123");
         personMapper.updateById(person);
+        return true;
+    }
+    public boolean register(String name, String password, String username) {
+        Person person = personMapper.selectByUsername(username);
+        if(person!=null){return false;}
+        person = new Person();
+        person.setPassword(password);
+        person.setUsername(username);
+        person.setName(name);
+        person.setType(3);
+        personMapper.insert(person);
+        Student student = new Student();
+        student.setPersonId(person.getId());
+        studentMapper.insert(student);
+        StudentDetail studentDetail = new StudentDetail();
+        studentDetail.setStudentId(student.getId());
+        studentDetailMapper.insert(studentDetail);
         return true;
     }
 }

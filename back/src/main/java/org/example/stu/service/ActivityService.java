@@ -65,8 +65,6 @@ public class ActivityService {
             int rowsAffected = activityMapper.insert(activity);
             return rowsAffected > 0;
         } catch (Exception e) {
-            // 处理异常，例如记录日志、抛出运行时异常等
-            // 这里简单地重新抛出异常，但在实际应用中您可能希望有更复杂的错误处理逻辑
             throw new RuntimeException("Failed to add activity", e);
         }
     }
@@ -118,7 +116,21 @@ public class ActivityService {
     }
 
     public boolean add(Activity activity) {
-        if (activityMapper.selectByNum(activity.getNum()) != null) return false;
+        if (!activityMapper.selectByNum(activity.getNum()).isEmpty()) return false;
+        activityMapper.insert(activity);
+        return true;
+    }
+
+    public boolean add(Integer studentId, String activityNum) {
+        if(activityMapper.selectByNumAndStudentId(studentId, activityNum)!=null)return false;
+        Activity activity =new Activity();
+        activity.setStudentId(studentId);
+        activity.setNum(activityNum);
+        activity.setApproveStatus("未批准");
+        List<Activity> temp=activityMapper.selectByNum(activityNum);
+        activity.setName(temp.get(0).getName());
+        activity.setOrganizationalUnit(temp.get(0).getOrganizationalUnit());
+        activity.setActivityType(temp.get(0).getActivityType());
         activityMapper.insert(activity);
         return true;
     }

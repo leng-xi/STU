@@ -25,4 +25,14 @@ public class CourseChoose {
     private Student student;
     @TableField(exist = false)
     private Person person;
+    @TableField(exist = false)
+    private Integer num1;
+    @TableField(exist = false)
+    private Integer num2;
+    @TableField(exist = false)
+    private Integer num3;
+    @TableField(exist = false)
+    private Integer num4;
+    @TableField(exist = false)
+    private Integer num5;
 }

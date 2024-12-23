@@ -37,7 +37,7 @@ public class TeacherController {
         log.info("添加教师信息:{}",teacher);
         if(teacher.getPerson().getName().isEmpty()||teacher.getPerson().getName().length()>10)return Result.error("姓名输入不合法");
         if(teacher.getPerson().getUsername().isEmpty()||teacher.getPerson().getUsername().length()>20)return Result.error("用户名输入不合法");
-        //if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
+        if(teacher.getPerson().getCard().isEmpty()||teacher.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
 
         if(!teacherService.addTeacher(teacher)){
             return Result.error("该教师已存在");
@@ -84,6 +84,7 @@ public class TeacherController {
         log.info("更新教师信息:{}",teacher);
         if(teacher.getPerson().getName().isEmpty()||teacher.getPerson().getName().length()>10)return Result.error("姓名输入不合法");
         if(teacher.getPerson().getUsername().isEmpty()||teacher.getPerson().getUsername().length()>20)return Result.error("用户名输入不合法");
+        if(teacher.getPerson().getCard().isEmpty()||teacher.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
         if(!teacherService.updateTeacher(teacher)){
             return Result.error("用户名已存在");
         }

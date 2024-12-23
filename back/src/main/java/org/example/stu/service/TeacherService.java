@@ -97,4 +97,21 @@ public class TeacherService {
         Person per = personMapper.selectByUsername(teacherNum);
         return per.getName();
     }
+    public boolean register(String name, String password, String username) {
+        Person person = personMapper.selectByUsername(username);
+        if(person!=null){return false;}
+        person = new Person();
+        person.setPassword(password);
+        person.setUsername(username);
+        person.setName(name);
+        person.setType(2);
+        personMapper.insert(person);
+        Teacher teacher = new Teacher();
+        teacher.setPersonId(person.getId());
+        teacherMapper.insert(teacher);
+        TeacherDetail teacherDetail = new TeacherDetail();
+        teacherDetail.setTeacherId(teacher.getId());
+        teacherDetailMapper.insert(teacherDetail);
+        return true;
+    }
 }

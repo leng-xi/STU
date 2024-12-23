@@ -1,6 +1,7 @@
 package org.example.stu;
 
 
+import org.example.stu.mapper.LoginMapper;
 import org.example.stu.mapper.PersonMapper;
 import org.example.stu.mapper.StudentMapper;
 import org.junit.jupiter.api.Test;

@@ -40,7 +40,7 @@ public class StudentController {
             return Result.error("姓名输入不合法");
         if (student.getPerson().getUsername().isEmpty() || student.getPerson().getUsername().length() > 20)
             return Result.error("学号输入不合法");
-        //if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
+        if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
         if (!studentService.addStudent(student)) {
             return Result.error("该学生已存在");
         }
@@ -86,6 +86,8 @@ public class StudentController {
             return Result.error("姓名输入不合法");
         if (student.getPerson().getUsername().isEmpty() || student.getPerson().getUsername().length() > 20)
             return Result.error("学号输入不合法");
+        if(student.getPerson().getCard().isEmpty()||student.getPerson().getCard().length()!=18)return Result.error("身份证号输入不合法");
+
         if (!studentService.updateStudent(student)) {
             return Result.error("学号已存在");
         }

@@ -33,4 +33,8 @@ public interface ActivityMapper extends BaseMapper<Activity> {
 
     @Select("select distinct num from activity")
     List<Activity> getList();
+
+    @Select("select * from activity where num = #{activityNum} and student_id = #{studentId}")
+    Activity selectByNumAndStudentId(Integer studentId, String activityNum);
+
 }
